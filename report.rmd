@@ -88,7 +88,9 @@ Our data looks at the $476$ stocks in in the S&P 500 today with data dating back
 
 ```{r echo=FALSE}
 load("linear_project_data_plot_cor.Rda")
-head(full_data)
+x <- head(full_data)
+knitr::kable(x[,1:5], format="markdown")
+knitr::kable(x[,6:10], format="markdown")
 ```
 from this we can obtain a correlation matrix
 
@@ -123,7 +125,10 @@ for (i in 1:ncol(clean_data)){
 }
 # Better cor matrix
 cor.matrix.cleaned <- cor(clean_data)
-cor.matrix.cleaned
+y <- cor.matrix.cleaned
+knitr::kable(y[,1:3], format="markdown")
+knitr::kable(y[,4:6], format="markdown")
+knitr::kable(y[,7:9], format="markdown")
 plot(clean_data, main = 'Scatter Plot for Variables (Cleaned)')
 ```
 
@@ -143,32 +148,50 @@ We recorded an Rsquared value of $`r rsq`$ and had multiple predictors that were
 # Dropping variables to minimize AIC (quality of fitting & complexity of the model)
 reduced.model <- step(full.model, direction = 'backward') # same result as 'forward'
 summary(reduced.model)
-anova(reduced.model)
+# anova(reduced.model)
 ```
 
 By looking at the correlations between the 4 predictors, they are very independent with each other. We can see this by looking at the correlation matrix and its relevant heat map.
 
 ```{r, echo=FALSE, fig.width=7, fig.height=5}
 reduced.cor.matrix <- cor(clean_data[ , c(3,7,8,9)]) # Good, predictors are not highly correlated
-reduced.cor.matrix
+z <- reduced.cor.matrix
+knitr::kable(z[,1:2], format="markdown")
+knitr::kable(z[,3:4], format="markdown")
+```
+
+
+We also provide the heat map of this correlation matrix, with higher correlation corresponding to darker shades.
+
+```{r echo=FALSE}
 library(RColorBrewer)
 heatmap(cor.matrix.cleaned, col=brewer.pal(9,"Greys"), cexRow = 0.7, cexCol = 0.7,
         Rowv = NA, symm = T, reorderfun = NULL, margins = c(8,8), main = 'cor.matrix.cleaned')
 ```
 
-We are going to continue to explore our data and see if we can potentially use different predictor variables and/or a polynomial regression to fit our data better. Additionally, we will explore other methods to replace the `NA`'s which could give our model a higher Rsquared. But first, we will see if there are any outliers.
+We will to continue to explore our data and see if we can potentially use different predictor variables and/or a polynomial regression to fit our data better. Additionally, we will explore other methods to replace the `NA`'s which could give our model a higher Rsquared. But first, we will see if there are any outliers.
 
 
 ## Checking for outliers
 
+In hopes of improving our model, we will set out to find a small subset of outliers we can throw out to drastically improve our model. First, let's take a look at the frequency histogram for our response variable `Delta.price`,
 
-```{r}
+
+```{r echo=FALSE}
 hist(clean_data$Delta.price)
+```
+
+which shows that the values of `Delta.price` are skewed right and do not approximate a normal distribution. We can also inspect two diagnostic plots of our fitted model.
+
+```{r echo=FALSE}
 par(mfrow=c(1,2))
 plot(full.model, which=c(1:2), pch=20)
 ```
 
-```{r}
+The plot on the right shows the model residuals vs the fitted values. We expect these residuals to be uniformly randomly distributed evenly both above and below mean $0$. There are clearly outliers, as numbered. The plot on the right plots the standardized residuals against the theoretical values. This follow the normal line (dotted) closely. Clearly these same outliers , cases $404$, $6$ and $333$, as well as many other values diverge from this line. We will take out these observations as well as others, for a total of $31$ observations deleted.
+
+
+```{r echo=FALSE}
 dropped <- c(-6,-333,-404,-14,-214,
                   -27,-2,-127,-287,
                   -384,-426,-49,-181,
@@ -177,14 +200,17 @@ dropped <- c(-6,-333,-404,-14,-214,
                   -9, -119, -440,
                   -78,-148, -29,-389,
                   -21, -75, -297, -233)
-length(dropped)
+# length(dropped)
 full.model.drop <- lm(Delta.price ~ ., data = clean_data, subset=dropped)
 
+summary(full.model.drop)
+```
 
+Now, given our R-squared of $0.5092$, our response is much better explained by our variables. Furthermore, lookingat same diagnostic plots, we see that the normality of our standardized residuals vs theoretical values is much improved.
 
+```{r echo=FALSE}
 par(mfrow=c(1,2))
 plot(full.model.drop, which=c(1:2), pch=20)
-summary(full.model.drop)
 ```
 
 
