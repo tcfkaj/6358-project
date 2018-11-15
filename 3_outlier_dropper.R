@@ -46,4 +46,13 @@ summary(model1)
 plot(model1)
 # No good R^2
 
+# Saving...
+clean_data_drop <- clean_data[dropped, ]
+write.csv(clean_data_drop, file = 'clean_data_drop.csv')
+
+# Replace NAs with 0 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+zero_data_drop <- zero_data[dropped, ]
+write.csv(zero_data_drop, file = 'zero_data_drop.csv')
+# <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
 
