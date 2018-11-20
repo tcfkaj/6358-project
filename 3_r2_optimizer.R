@@ -31,7 +31,7 @@ clean_data_drop <- clean_data[-dropvar, ]
 summary(lm(Delta.price ~., clean_data_drop))
 write.csv(clean_data_drop, file = 'clean_data_drop_v2.csv')
 
-# Replace NAs with 0 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+# If replaced NAs with 0 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 zero_data_drop <- zero_data[-dropvar, ]
 write.csv(zero_data_drop, file = 'zero_data_drop_v2.csv')
 # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
