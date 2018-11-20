@@ -11,6 +11,7 @@ header-includes:
 - \usepackage{amsthm}
 - \usepackage{graphicx}
 - \newcommand{\Lim}[1]{\raisebox{0.5ex}{\scalebox{0.8}{$\displaystyle \lim_{#1}\;$}}}
+- \makeatletter\renewcommand*{\fps@figure}{H}\makeatother
 output:
  pdf_document:
   latex_engine: xelatex
@@ -18,10 +19,11 @@ linkcolor: blue
 ---
 
 ```{r global.options, include = TRUE, echo=FALSE}
+library(kableExtra)
 knitr::opts_chunk$set(
     cache       = TRUE,     # if TRUE knitr will cache the results to reuse in future knits
-    fig.width   = 5,       # the width for plots created by code chunk
-    fig.height  = 3.5,       # the height for plots created by code chunk
+    fig.width   = 5.5,       # the width for plots created by code chunk
+    fig.height  = 4,       # the height for plots created by code chunk
     fig.align   = 'center', # how to align graphics in the final doc. 'left', 'right', 'center'
     fig.path    = 'figs/',  # file path to the directory where knitr shall store the graphics files
     echo        = TRUE,     # in FALSE knitr will not display code in the code chunk above it's results
@@ -101,7 +103,7 @@ knitr::kable(cor.matrix[,1:9], format="markdown", digits=4)
 
 and scatterplot.
 
-```{r , echo=FALSE, fig.width=5.75, fig.height=4.25, fig.caption="Correlation matrix of uncleaned data."}
+```{r , echo=FALSE, fig.cap="\\label{fig:figs}Scatterplot of raw data."}
 plot(full_data[,-1], pch=20)
 ```
 
@@ -115,24 +117,23 @@ With our project we hope to find which predictor variables affect the response v
 
 Before formulating our model, we cleaned our data by filling in missing values. For the predictor variable `Div`, missing values were assumed to be $0$, this is because dividends other than $0$ are usually reported and recorded. For all other predictors, missing values were filled in with the mean among all observations for that data. After our data was cleaned we have the following correlation matrix and plot.
 
-```{r, echo=FALSE, fig.width=5.75, fig.height=4.25}
-# Replace NAs with mean of the column
-clean_data <- full_data[, -1]
+```{r echo=FALSE}
+clean_data <- read.table("clean_data.csv", header=T, sep=",")
+clean_data <- clean_data[,-1]
 colnames(clean_data) <- c("Price.ch", "EPS", "Div", "BV", "RoA", "RoE", "RoIC", "DE", "Rev")
-for (i in 1:ncol(clean_data)){
-  clean_data[is.na(clean_data[, i]), i] <- mean(clean_data[, i], na.rm = T)
-}
-# Better cor matrix
+```
+
+```{r, echo=FALSE}
 cor.matrix.cleaned <- cor(clean_data)
 y <- cor.matrix.cleaned
 knitr::kable(y[,1:9], format="markdown", digits=4)
 ```
-```{r, echo=FALSE, fig.width=5.75, fig.height=4.25, fig.caption="Correlation matrix of cleaned data."}
+```{r, echo=FALSE, fig.cap="\\label{fig:figs}Scatterplot of clean data."}
 plot(clean_data, pch=20)
 ```
 We were also able to generate a heat map of this correlation matrix.
 
-```{r echo=FALSE}
+```{r echo=FALSE, fig.cap="\\label{fig:figs}Heat map of correlation matrix, darker colors correspond to greater correlation."}
 library(RColorBrewer)
 heatmap(cor.matrix.cleaned, col=brewer.pal(9,"Greys"), cexRow = 0.7, cexCol = 0.7,
         Rowv = NA, symm = T, reorderfun = NULL, margins = c(8,8), main = 'cor.matrix.cleaned')
@@ -147,7 +148,13 @@ We will formulate a simple linear model, where our response, `Price.ch`, is a li
 \widehat{\text{Price.ch}_{i_{}}} = \beta_0 + \beta_1 \text{EPS}_{i_{}} + \beta_2 \text{Div}_{i_{}} + \beta_3 \text{BV}_{i_{}} + \beta_4 \text{RoA}_{i_{}} + \beta_5 \text{RoE}_{i_{}} + \beta_6 \text{RoIC}_{i_{}} + \beta_7 \text{DE}_{i_{}} + \beta_8 \text{Rev}_{i_{}} + \epsilon_i
 \end{equation}
 
-where $\epsilon_i \sim^{\text{iid}} N(0, \sigma^2)$. Where $\sigma^2$ is the population variance. After this, our initial attempt was to take our data and run a multiple linear regression on it. The summary is as follows.
+where $\epsilon_i \sim^{\text{iid}} N(0, \sigma^2)$. Where $\sigma^2$ is the population variance. Therefore we make the following assumptions for our model
+
+1. Observations are indepent indentically distributed (iid), as is error, $\epsilon_i$.
+2. Our response is normally distributed with mean $0$ and variance $\sigma^2$
+
+
+After formulating our model, we fit our data to this model using R. The summary is as follows.
 
 ```{r, echo=FALSE, fig.width=8, fig.height=5}
 full.model <- lm(Price.ch ~ ., data = clean_data)
@@ -155,81 +162,72 @@ summary(full.model)
 rsq <- summary(full.model)$r.squared
 ```
 
-We were able to generate the following diagnostic plots.
+Therefore our fitted model, with point estimates, of the parameters $\beta_0,..., \beta_8$, is given by
 
-```{r, echo=FALSE}
+\begin{equation}
+\tag*\*{}
+\widehat{\text{Price.ch}_{i_{}}} = 0.935 + 0.004 \text{EPS}_{i_{}} + 0.047 \text{Div}_{i_{}} + 0.003 \text{BV}_{i_{}} + 0.009 \text{RoA}_{i_{}} + 0.001 \text{RoE}_{i_{}} + 0.052 \text{RoIC}_{i_{}} + 0.019 \text{DE}_{i_{}} + 0.548 \text{Rev}_{i_{}} + \epsilon_i
+\end{equation}
+
+Immediately we see that with such a small p-value, $2.2 \times 10^{-16}$, our model is significant. We also see that there are two predictors displaying initial significance, `Div` and `Rev`. However, in addition to our model having an R-squared of $`r rsq`$, indicating that only about $30\%$ of variation in our response is explained by our predictors, the following diagnostic plots challenge our assumptions.
+
+```{r, echo=FALSE, fig.cap="\\label{fig:figs}Errors vs fitted values (Left) challenges iid error terms. While QQ Plot (Right) challenges the normality of our response."}
 par(mfrow=c(1,2))
-plot(full.model)
+plot(full.model, c(1,2))
 ```
+Additionally we can see that the histogram of our response values is skewed right, further challenging the normality of our response and indicating outliers.
 
-In addition to our model having an R-squared of `r rsq`, indicating that only about $30\%$ of variation in our response is explained by our predictors, these plots are of concern. The plot of our Residuals vs. Fitted values indicates that our
+
+```{r echo=FALSE, fig.cap="\\label{fig:figs}Histogram of response, `Price.ch`, skewness suggests outliers."}
+hist(clean_data$Price.ch, main="", xlab="Price.ch")
+```
 
 ## Checking for outliers
 
-In hopes of improving our model, we will set out to find a small subset of outliers we can throw out to drastically improve our model. First, let's take a look at the frequency histogram for our response variable `Price.ch`,
+In hopes of improving our model, we will set out to find a small subset of outliers we can throw out to improve our model. Our initial goal was to raise our R-squared value to at least $0.5$ with the hopes that this would help the distribution of our errors as well as the normality of our response. We wrote a script to this automatically and were able to raise our R-squared above $0.5$ by dropping $29$ observations. However, the question of whether this affects the validity of our model is a perfectly legitimate one.
+
+## Reason for dropping outliers.
+
+## Final model.
+
+We now look assess this subset of our original data, with the outliers withdrawn. We fit this data to our original model using R to obtain the following summary.
+
+```{r, echo=FALSE}
+final_data <- read.table("clean_data_drop_v2.csv", header=T, sep=",")
+final_data <- final_data[,-1]
+colnames(final_data) <- c("Price.ch", "EPS", "Div", "BV", "RoA", "RoE", "RoIC", "DE", "Rev")
+final.lm <- lm(Price.ch~., data=final_data)
+summary(final.lm)
+```
+We now have an R-squared of $0.5061$, indicating that approximately $51\%$ of the variation in our response can be explained by our predictors. Additionally the p-value of our model remained the same, indicating significance of our overall model. However, we now show four initially significant predictors, `Div`, `BV`, `RoIC`, and `Rev`. After generating the same diagnostic plots as before we see improve, albeit not perfection, which is hardly ever to be expected from real world data.
 
 
-```{r echo=FALSE}
-hist(clean_data$Price.ch)
+```{r, echo=FALSE, fig.cap="\\label{fig:figs}Both the plot of errors vs fitted values (Left) and QQ Plot (Right) show improvement."}
+par(mfrow=c(1,2))
+plot(final.lm, c(1,2))
 ```
 
-which shows that the values of `Price.ch` are skewed right and do not approximate a normal distribution. We will now attempt to drop as few outliers as possible.
+However, with these improvements we felt comfortable moving forward with our model and all of its assumptions.
 
-# STOP HERE.................. SCRATCH WORK FOLLOWS
+Since not all predictors exihibited significance, we proceeded to reduce our model using R's built in `step` function. This function minimizes an information criteron AIC, which in effect improves model fit and reduces complexity. The output summary of this process and the resulting reduced model is as follows.
 
-```{r, echo=FALSE, fig.width=7, fig.height=5}
-# Backward elimination method:
-# Dropping variables to minimize AIC (quality of fitting & complexity of the model)
-reduced.model <- step(full.model, direction = 'backward') # same result as 'forward'
-summary(reduced.model)
-# anova(reduced.model)
+```{r, echo=FALSE}
+final.lm.red <- step(final.lm)
+summary(final.lm.red)
 ```
 
-```{r, echo=FALSE, fig.width=7, fig.height=5}
-reduced.cor.matrix <- cor(clean_data[ , c(3,7,8,9)]) # Good, predictors are not highly correlated
-z <- reduced.cor.matrix
-knitr::kable(z[,1:4], format="markdown", digits=4)
-```
-
-```{r echo=FALSE}
-library(RColorBrewer)
-heatmap(cor.matrix.cleaned, col=brewer.pal(9,"Greys"), cexRow = 0.7, cexCol = 0.7,
-        Rowv = NA, symm = T, reorderfun = NULL, margins = c(8,8), main = 'cor.matrix.cleaned')
-```
+Our reduced model is thus given by
 
 
+\begin{equation}
+\tag*\*{}
+\widehat{\text{Price.ch}_{i_{}}} = \beta_0 + \beta_1 \text{Div}_{i_{}} + \beta_2 \text{BV}_{i_{}} + \beta_3 \text{RoIC}_{i_{}} + \beta_4 \text{Rev}_{i_{}} + \epsilon_i
+\end{equation}
 
-```{r echo=FALSE}
-hist(clean_data$Price.ch)
-```
-
-```{r echo=FALSE}
-# dropped <- c(-6,-333,-404,-14,-214,
-#                   -27,-2,-127,-287,
-#                   -384,-426,-49,-181,
-#                   -43,-28,-149,-39,
-#                   -50, -320, -326,
-#                   -9, -119, -440,
-#                   -78,-148, -29,-389,
-#                   -21, -75, -297, -233)
-# length(dropped)
-# full.model.drop <- lm(Price.ch ~ ., data = clean_data, subset=dropped)
-# summary(full.model.drop)
-```
-
-```{r echo=FALSE}
-# par(mfrow=c(1,2))
-# plot(full.model.drop, which=c(1:2), pch=20)
-```
+where $\epsilon_i \sim^{\text{iid}} N(0, \sigma^2)$. Our reduced model carries the same assumptions as our original model. The model with the point estimations of our parameters is given by
 
 
-```{r echo=FALSE}
-# hist(clean_data$Price.ch[dropped])
-```
-
-```{r echo=FALSE}
-# reduced.model.drop <- step(full.model.drop, direction = 'backward')
-# summary(reduced.model.drop)
-# anova(reduced.model.drop)
-# full_data$Company[-1*dropped]
-```
+\begin{equation}
+\tag*\*{}
+\widehat{\text{Price.ch}_{i_{}}} = 0.785 + 0.072 \text{Div}_{i_{}} + 0.025 \text{BV}_{i_{}} + 0.109 \text{RoIC}_{i_{}} + 0.479 \text{Rev}_{i_{}} + \epsilon_i.
+\end{equation}
