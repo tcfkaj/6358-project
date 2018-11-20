@@ -54,7 +54,7 @@ The S&P 500 is based on market cap and some companies will grow in size or fall 
 
 ## Response Variable
 
-Share Price (Y): Our response variable is going to be the share price of each company within the S&P 500. We are going to take the average share price for 2011 and the average share price for 2017 and then calculate the percent difference for each company.
+`Price.ch`: Our response variable is going to be the share price of each company within the S&P 500. We are going to take the average share price for 2011 and the average share price for 2017 and then calculate the percent difference for each company.
 
 ## Predictor Variables
 
@@ -64,21 +64,21 @@ Our goal with this project is to find the predictor variables that have the bigg
 
 All of our variables are going to be using their percent change in yearly unit during our time period of 2011-2017. We will start with the predictor variables' 2011 observations and end with the predictor variables' 2017 observations. We chose this time frame because it gave us our yearly data of 2011, a 5 year time frame, then our yearly data of 2017.
 
-1. Earnings per Share: Earnings per share (EPS) is the portion of a company's profit allocated to each share of common stock. Earnings per share serves as an indicator of a company's profitability.
+1. `EPS`: Earnings per share (EPS) is the portion of a company's profit allocated to each share of common stock. Earnings per share serves as an indicator of a company's profitability.
 
-2. Dividend: A dividend is a payment made by a corporation to its shareholders, usually as a distribution of profits. When a corporation earns a profit or surplus, the corporation is able to re-invest the profit in the business and pay a proportion of the profit as a dividend to shareholders.
+2. `Div`: A dividend is a payment made by a corporation to its shareholders, usually as a distribution of profits. When a corporation earns a profit or surplus, the corporation is able to re-invest the profit in the business and pay a proportion of the profit as a dividend to shareholders.
 
-3. Book Value per Share: Book value per share indicates the book value (or accounting value) of each share of stock. Book value is a company's net asset value, which is calculated by total assets minus intangible assets and liabilities. An easy way to think of book value per share is what is the expected value of the company.
+3. `BV`: Book value per share indicates the book value (or accounting value) of each share of stock. Book value is a company's net asset value, which is calculated by total assets minus intangible assets and liabilities. An easy way to think of book value per share is what is the expected value of the company.
 
-4. Return on Assets: The return on assets shows the percentage of how profitable a company's assets are in generating revenue.
+4. `RoA`: The return on assets shows the percentage of how profitable a company's assets are in generating revenue.
 
-5. Return on Equity: Return on equity is a measure of the profitability of a business in relation to the book value of shareholder equity, also known as net assets or assets minus liabilities. ROE is a measure of how well a company uses investments to generate earnings growth.
+5. `RoE`: Return on equity is a measure of the profitability of a business in relation to the book value of shareholder equity, also known as net assets or assets minus liabilities. ROE is a measure of how well a company uses investments to generate earnings growth.
 
-6. Return on Invested Capital: Return on capital (ROC), or return on invested capital(ROIC), is a ratio used in finance, valuation and accounting, as a measure of the profitability and value-creating potential of companies after taking into account the amount of initial capital invested.
+6. `RoIC`: Return on capital (ROC), or return on invested capital(ROIC), is a ratio used in finance, valuation and accounting, as a measure of the profitability and value-creating potential of companies after taking into account the amount of initial capital invested.
 
-7. Debt / Equity: Debt/Equity (D/E) Ratio, calculated by dividing a company's total liabilities by its stockholders' equity, is a debt ratio used to measure a company's financial leverage. The D/E ratio indicates how much debt a company is using to finance its assets relative to the value of shareholders' equity.
+7. `DE`: Debt/Equity (D/E) Ratio, calculated by dividing a company's total liabilities by its stockholders' equity, is a debt ratio used to measure a company's financial leverage. The D/E ratio indicates how much debt a company is using to finance its assets relative to the value of shareholders' equity.
 
-8. Revenue: Revenue is the income that a business has from its normal business activities, usually from the sale of goods and services to customers.
+8. `Rev`: Revenue is the income that a business has from its normal business activities, usually from the sale of goods and services to customers.
 
 
 # The Data
@@ -88,22 +88,21 @@ Our data looks at the $476$ stocks in in the S&P 500 today with data dating back
 
 ```{r echo=FALSE}
 load("linear_project_data_plot_cor.Rda")
+colnames(full_data) <- c("Co.", "Price.ch", "EPS", "Div", "BV", "RoA", "RoE", "RoIC", "DE", "Rev")
 x <- head(full_data)
-knitr::kable(x[,1:5], format="markdown")
-knitr::kable(x[,6:10], format="markdown")
+knitr::kable(x[,1:10], format="markdown", digits=4)
 ```
 from this we can obtain a correlation matrix
 
 ```{r echo=FALSE}
-knitr::kable(cor.matrix[,1:3], format="markdown")
-knitr::kable(cor.matrix[,4:6], format="markdown")
-knitr::kable(cor.matrix[,7:9], format="markdown")
+cor.matrix <- cor(full_data[,-1], use="complete.obs")
+knitr::kable(cor.matrix[,1:9], format="markdown", digits=4)
 ```
 
 and scatterplot.
 
-```{r , echo=FALSE, fig.width=8, fig.height=6}
-plot(full_data[-1], main = 'Scatter Plot for Variables')
+```{r , echo=FALSE, fig.width=5.75, fig.height=4.25, fig.caption="Correlation matrix of uncleaned data."}
+plot(full_data[,-1], pch=20)
 ```
 
 # Why we chose this data
@@ -112,36 +111,71 @@ We chose this project due to the vast amounts of data that the stock market enco
 
 With our project we hope to find which predictor variables affect the response variable (share price) the most. We are excited to see what our models come up with. The findings will be interesting as there are many different theories as to what is the most important predictor variables for a companies share price.
 
+# Data preprocessing
 
-## Current Progress
+Before formulating our model, we cleaned our data by filling in missing values. For the predictor variable `Div`, missing values were assumed to be $0$, this is because dividends other than $0$ are usually reported and recorded. For all other predictors, missing values were filled in with the mean among all observations for that data. After our data was cleaned we have the following correlation matrix and plot.
 
-Before we were able to run a multiple linear regression we had to clean our data and replace the `NA`'s. For the predictor variable `Dividends` the `NA`'s were replaced with 0 because this meant that the company (stock) did not have a dividend payment. For the other predictor variables, the `NA` was replaced with means. For this cleaned data we obtain the correlation matrix and scatterplot.
-
-```{r, echo=FALSE, fig.width=6, fig.height=6}
+```{r, echo=FALSE, fig.width=5.75, fig.height=4.25}
 # Replace NAs with mean of the column
 clean_data <- full_data[, -1]
+colnames(clean_data) <- c("Price.ch", "EPS", "Div", "BV", "RoA", "RoE", "RoIC", "DE", "Rev")
 for (i in 1:ncol(clean_data)){
   clean_data[is.na(clean_data[, i]), i] <- mean(clean_data[, i], na.rm = T)
 }
 # Better cor matrix
 cor.matrix.cleaned <- cor(clean_data)
 y <- cor.matrix.cleaned
-knitr::kable(y[,1:3], format="markdown")
-knitr::kable(y[,4:6], format="markdown")
-knitr::kable(y[,7:9], format="markdown")
-plot(clean_data, main = 'Scatter Plot for Variables (Cleaned)')
+knitr::kable(y[,1:9], format="markdown", digits=4)
+```
+```{r, echo=FALSE, fig.width=5.75, fig.height=4.25, fig.caption="Correlation matrix of cleaned data."}
+plot(clean_data, pch=20)
+```
+We were also able to generate a heat map of this correlation matrix.
+
+```{r echo=FALSE}
+library(RColorBrewer)
+heatmap(cor.matrix.cleaned, col=brewer.pal(9,"Greys"), cexRow = 0.7, cexCol = 0.7,
+        Rowv = NA, symm = T, reorderfun = NULL, margins = c(8,8), main = 'cor.matrix.cleaned')
 ```
 
-After this, our initial attempt was to take our data and run a multiple linear regression on it. The summary is as follows.
+# Our Model
+
+We will formulate a simple linear model, where our response, `Price.ch`, is a linear combination of our predictors
+
+\begin{equation}
+\tag*\*{}
+\widehat{\text{Price.ch}_{i_{}}} = \beta_0 + \beta_1 \text{EPS}_{i_{}} + \beta_2 \text{Div}_{i_{}} + \beta_3 \text{BV}_{i_{}} + \beta_4 \text{RoA}_{i_{}} + \beta_5 \text{RoE}_{i_{}} + \beta_6 \text{RoIC}_{i_{}} + \beta_7 \text{DE}_{i_{}} + \beta_8 \text{Rev}_{i_{}} + \epsilon_i
+\end{equation}
+
+where $\epsilon_i \sim^{\text{iid}} N(0, \sigma^2)$. Where $\sigma^2$ is the population variance. After this, our initial attempt was to take our data and run a multiple linear regression on it. The summary is as follows.
 
 ```{r, echo=FALSE, fig.width=8, fig.height=5}
-full.model <- lm(Delta.price ~ ., data = clean_data)
+full.model <- lm(Price.ch ~ ., data = clean_data)
 summary(full.model)
 rsq <- summary(full.model)$r.squared
 ```
 
-We recorded an Rsquared value of $`r rsq`$ and had multiple predictors that were deemed insignificant by minimizing AIC via R's `step` function. Minimizing AIC will optiminize quality and minimize the complexity. Due to this, we ran a stepwise function to limit our data to just the significant predictors. The significant predictors that we ended up with were `Dividends.USD`, `Return on Invested Capital`, `Debt/Equity`, `Revenue`. We then obtained the following reduced linear model.
+We were able to generate the following diagnostic plots.
 
+```{r, echo=FALSE}
+par(mfrow=c(1,2))
+plot(full.model)
+```
+
+In addition to our model having an R-squared of `r rsq`, indicating that only about $30\%$ of variation in our response is explained by our predictors, these plots are of concern. The plot of our Residuals vs. Fitted values indicates that our
+
+## Checking for outliers
+
+In hopes of improving our model, we will set out to find a small subset of outliers we can throw out to drastically improve our model. First, let's take a look at the frequency histogram for our response variable `Price.ch`,
+
+
+```{r echo=FALSE}
+hist(clean_data$Price.ch)
+```
+
+which shows that the values of `Price.ch` are skewed right and do not approximate a normal distribution. We will now attempt to drop as few outliers as possible.
+
+# STOP HERE.................. SCRATCH WORK FOLLOWS
 
 ```{r, echo=FALSE, fig.width=7, fig.height=5}
 # Backward elimination method:
@@ -151,17 +185,11 @@ summary(reduced.model)
 # anova(reduced.model)
 ```
 
-By looking at the correlations between the 4 predictors, they are very independent with each other. We can see this by looking at the correlation matrix and its relevant heat map.
-
 ```{r, echo=FALSE, fig.width=7, fig.height=5}
 reduced.cor.matrix <- cor(clean_data[ , c(3,7,8,9)]) # Good, predictors are not highly correlated
 z <- reduced.cor.matrix
-knitr::kable(z[,1:2], format="markdown")
-knitr::kable(z[,3:4], format="markdown")
+knitr::kable(z[,1:4], format="markdown", digits=4)
 ```
-
-
-We also provide the heat map of this correlation matrix, with higher correlation corresponding to darker shades.
 
 ```{r echo=FALSE}
 library(RColorBrewer)
@@ -169,66 +197,39 @@ heatmap(cor.matrix.cleaned, col=brewer.pal(9,"Greys"), cexRow = 0.7, cexCol = 0.
         Rowv = NA, symm = T, reorderfun = NULL, margins = c(8,8), main = 'cor.matrix.cleaned')
 ```
 
-We will to continue to explore our data and see if we can potentially use different predictor variables and/or a polynomial regression to fit our data better. Additionally, we will explore other methods to replace the `NA`'s which could give our model a higher Rsquared. But first, we will see if there are any outliers.
-
-
-## Checking for outliers
-
-In hopes of improving our model, we will set out to find a small subset of outliers we can throw out to drastically improve our model. First, let's take a look at the frequency histogram for our response variable `Delta.price`,
 
 
 ```{r echo=FALSE}
-hist(clean_data$Delta.price)
+hist(clean_data$Price.ch)
 ```
 
-which shows that the values of `Delta.price` are skewed right and do not approximate a normal distribution. We can also inspect two diagnostic plots of our fitted model.
-
 ```{r echo=FALSE}
-par(mfrow=c(1,2))
-plot(full.model, which=c(1:2), pch=20)
-```
-
-The plot on the right shows the model residuals vs the fitted values. We expect these residuals to be uniformly randomly distributed evenly both above and below mean $0$. There are clearly outliers, as numbered. The plot on the right plots the standardized residuals against the theoretical values. This follow the normal line (dotted) closely. Clearly these same outliers , cases $404$, $6$ and $333$, as well as many other values diverge from this line. We will take out these observations as well as others, for a total of $31$ observations deleted.
-
-
-```{r echo=FALSE}
-dropped <- c(-6,-333,-404,-14,-214,
-                  -27,-2,-127,-287,
-                  -384,-426,-49,-181,
-                  -43,-28,-149,-39,
-                  -50, -320, -326,
-                  -9, -119, -440,
-                  -78,-148, -29,-389,
-                  -21, -75, -297, -233)
+# dropped <- c(-6,-333,-404,-14,-214,
+#                   -27,-2,-127,-287,
+#                   -384,-426,-49,-181,
+#                   -43,-28,-149,-39,
+#                   -50, -320, -326,
+#                   -9, -119, -440,
+#                   -78,-148, -29,-389,
+#                   -21, -75, -297, -233)
 # length(dropped)
-full.model.drop <- lm(Delta.price ~ ., data = clean_data, subset=dropped)
-
-summary(full.model.drop)
+# full.model.drop <- lm(Price.ch ~ ., data = clean_data, subset=dropped)
+# summary(full.model.drop)
 ```
-
-Now, given our R-squared of $0.5092$, our response is much better explained by our variables. Furthermore, lookingat same diagnostic plots, we see that the normality of our standardized residuals vs theoretical values is much improved.
 
 ```{r echo=FALSE}
-par(mfrow=c(1,2))
-plot(full.model.drop, which=c(1:2), pch=20)
+# par(mfrow=c(1,2))
+# plot(full.model.drop, which=c(1:2), pch=20)
 ```
 
 
-
-
-```{r}
-hist(clean_data$Delta.price[dropped])
-reduced.model.drop <- step(full.model.drop, direction = 'backward')
-summary(reduced.model.drop)
-anova(reduced.model.drop)
-full_data$Company[-1*dropped]
+```{r echo=FALSE}
+# hist(clean_data$Price.ch[dropped])
 ```
 
-
-
-
-
-
-
-
-
+```{r echo=FALSE}
+# reduced.model.drop <- step(full.model.drop, direction = 'backward')
+# summary(reduced.model.drop)
+# anova(reduced.model.drop)
+# full_data$Company[-1*dropped]
+```
