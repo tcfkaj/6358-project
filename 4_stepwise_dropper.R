@@ -1,5 +1,5 @@
 # After dropping outliers in Step 3
-clean_data_drop <- read.csv('clean_data_drop.csv', row.names = 1)
+clean_data_drop <- read.csv('clean_data_drop_v2.csv', row.names = 1)
 
 # Better cor matrix
 cor.matrix.cleaned <- cor(clean_data_drop)
