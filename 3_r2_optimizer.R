@@ -24,7 +24,8 @@ while (max(index_clean$`R-Sq`) < r2goal){
   print(dropvar)
 }
 
-dropvar <- dropvar[2:29]
+dropvar <- dropvar[2:30]
+#dropvar <- dropvar[2:29]
 
 # Saving...
 clean_data_drop <- clean_data[-dropvar, ]
