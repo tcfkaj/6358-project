@@ -25,7 +25,7 @@ heatmap(cor.matrix.cleaned, col=brewer.pal(9,"Greys"), cexRow = 0.7, cexCol = 0.
 write.csv(cor.matrix.cleaned, file = 'cor_matrix_cleaned.csv')
 write.csv(reduced.cor.matrix, file = 'reduced_cor_matrix.csv')
 
-# Replace NAs with 0 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+# If replaced NAs with 0 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 zero_data_drop <- read.csv('zero_data_drop.csv', row.names = 1)
 
 cor.matrix.zero <- cor(zero_data_drop)
