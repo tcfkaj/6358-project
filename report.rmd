@@ -36,7 +36,7 @@ knitr::opts_chunk$set(
 
 ## S&P 500
 
-The Standard & Poor's 500, often abbreviated as the S&P 500, or just the S&P, is an American stock market index based on the market capitalizations of 500 large companies having common stock listed on the NYSE or NASDAQ. The NYSE and NASDAQ are the American stock exchanges where the stocks that make up the S&P 500 are traded. Market capitalization (market cap) is the market value of a publicly traded company's outstanding shares. Market capitalization is equal to the share price multiplied by the number of shares outstanding. As outstanding stock is bought and sold in public markets, capitalization could be used as an indicator of public opinion of a company's net worth and is a determining factor in some forms of stock valuation. The reason that we chose to use the S&P 500 for our companies is that it is a very broad and diversified index that includes companies from many different industries. The S&P 500 is one of the most commonly followed equity indices, and many consider it one of the best representations of the U.S. stock market, and a bellwether for the U.S. economy. The share prices for each company within the S&P 500 change daily (during trading days) based on trading interest. A share price is the price of a single share of a company, derivative or other financial asset. The share price is the highest amount someone is willing to pay for the stock, or the lowest amount that it can be bought for.
+The Standard & Poor's 500, often abbreviated as the S&P 500, or just the S&P, is an American stock market index based on the market capitalizations of 500 large companies having common stock listed on the New York Stock Exchange (NYSE) or Nasdaq, Inc (NASDAQ). The NYSE and NASDAQ are the American stock exchanges where the stocks that make up the S&P 500 are traded. Market capitalization (market cap) is the market value of a publicly traded company's outstanding shares. Market capitalization is equal to the share price multiplied by the number of shares outstanding. As outstanding stock is bought and sold in public markets, capitalization could be used as an indicator of public opinion of a company's net worth and is a determining factor in some forms of stock valuation. The reason that we chose to use the S&P 500 for our companies is that it is a very broad and diversified index that includes companies from many different industries. The S&P 500 is one of the most commonly followed equity indices, and many consider it one of the best representations of the U.S. stock market, and a bellwether for the U.S. economy. The share prices for each company within the S&P 500 change daily (during trading days) based on trading interest. A share price is the price of a single share of a company, derivative or other financial asset. The share price is the highest amount someone is willing to pay for the stock, or the lowest amount that it can be bought for.
 
 ## Time Frame
 
@@ -94,14 +94,14 @@ colnames(full_data) <- c("Co.", "Price.ch", "EPS", "Div", "BV", "RoA", "RoE", "R
 x <- head(full_data)
 knitr::kable(x[,1:10], format="markdown", digits=4)
 ```
-from this we can obtain a correlation matrix
+from this we can obtain the following correlation matrix.
 
 ```{r echo=FALSE}
 cor.matrix <- cor(full_data[,-1], use="complete.obs")
 knitr::kable(cor.matrix[,1:9], format="markdown", digits=4)
 ```
 
-and scatterplot.
+We see that there is strong correlation between `RoA` and `EPS`, there is some correlation between `Rev` and `BV`.
 
 ```{r , echo=FALSE, fig.cap="\\label{fig:figs}Scatterplot of raw data."}
 plot(full_data[,-1], pch=20)
@@ -131,12 +131,14 @@ knitr::kable(y[,1:9], format="markdown", digits=4)
 ```{r, echo=FALSE, fig.cap="\\label{fig:figs}Scatterplot of clean data."}
 plot(clean_data, pch=20)
 ```
-We were also able to generate a heat map of this correlation matrix.
+\newpage
 
-```{r echo=FALSE, fig.cap="\\label{fig:figs}Heat map of correlation matrix, darker colors correspond to greater correlation."}
+By looking at the scatterplot, there are potential linear relationships between `RoA` and both `EPS` and `RoE`. The correlation matrix and heat map confirm that `RoE` and `EPS` are highly correlated.
+
+```{r echo=FALSE, fig.cap="\\label{fig:figs}Heat map of correlation matrix for cleaned data, darker shades correspond to greater correlation."}
 library(RColorBrewer)
 heatmap(cor.matrix.cleaned, col=brewer.pal(9,"Greys"), cexRow = 0.7, cexCol = 0.7,
-        Rowv = NA, symm = T, reorderfun = NULL, margins = c(8,8), main = 'cor.matrix.cleaned')
+        Rowv = NA, symm = T, reorderfun = NULL, margins = c(8,8), main="Correlation of cleaned data")
 ```
 
 # Our Model
@@ -182,13 +184,21 @@ Additionally we can see that the histogram of our response values is skewed righ
 hist(clean_data$Price.ch, main="", xlab="Price.ch")
 ```
 
-## Checking for outliers
+## Checking for outliers.
 
 In hopes of improving our model, we will set out to find a small subset of outliers we can throw out to improve our model. Our initial goal was to raise our R-squared value to at least $0.5$ with the hopes that this would help the distribution of our errors as well as the normality of our response. We wrote a script to this automatically and were able to raise our R-squared above $0.5$ by dropping $29$ observations. However, the question of whether this affects the validity of our model is a perfectly legitimate one.
 
-## Reason for dropping outliers.
+## Justification for dropping outliers
 
-## Final model.
+It is generally not a good idea to drop a significant number of outliers without justification. However, given our knowledge of the market, there are two primary reasons that we believe dropping these outliers do not affect the objective of our model:
+
+1. We are only dropping $`r 2900/length(clean_data$Price.ch)`\%$ of a data, which is generally considered acceptable.
+
+2. The stock market is very volatile and is littered with extreme cases. Our predictors are very basic and most extreme cases will likely be correlated with other factors outside the scope of this project.
+
+Our objective is exploratory in nature and we are not expecting to attain any predictive power from this model.
+
+## Final model
 
 We now look assess this subset of our original data, with the outliers withdrawn. We fit this data to our original model using R to obtain the following summary.
 
@@ -231,3 +241,6 @@ where $\epsilon_i \sim^{\text{iid}} N(0, \sigma^2)$. Our reduced model carries t
 \tag*\*{}
 \widehat{\text{Price.ch}_{i_{}}} = 0.785 + 0.072 \text{Div}_{i_{}} + 0.025 \text{BV}_{i_{}} + 0.109 \text{RoIC}_{i_{}} + 0.479 \text{Rev}_{i_{}} + \epsilon_i.
 \end{equation}
+
+
+
