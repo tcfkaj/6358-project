@@ -192,11 +192,13 @@ In hopes of improving our model, we will set out to find a small subset of outli
 
 It is generally not a good idea to drop a significant number of outliers without justification. However, given our knowledge of the market, there are two primary reasons that we believe dropping these outliers do not affect the objective of our model:
 
-1. We are only dropping $`r 2900/length(clean_data$Price.ch)`\%$ of a data, which is generally considered acceptable.
+1. We are only dropping $`r round(2900/length(clean_data$Price.ch), 2)`\%$ of our data set, which is generally considered acceptable.
 
 2. The stock market is very volatile and is littered with extreme cases. Our predictors are very basic and most extreme cases will likely be correlated with other factors outside the scope of this project.
 
-Our objective is exploratory in nature and we are not expecting to attain any predictive power from this model.
+3. We are studying the SP500 as a subset of popular stocks, but it also gives us insight into the population of all stocks. The SP500 is likely not representative of the population of all stocks. A random subset of 500 stocks from all stocks is more likely to contain a smaller percentage of these extreme observations. In the worst case dropping a small subset of outliers may actually help correct for this, making our sample more representative of the population of all stocks.
+
+Our objective is exploratory in nature and we are not expecting to attain any predictive power from this model. We are only interested in which predictors are significant for most cases. We feel that this model, even with the outliers dropped, is still realistic in this regard.
 
 ## Final model
 
