@@ -245,4 +245,16 @@ where $\epsilon_i \sim^{\text{iid}} N(0, \sigma^2)$. Our reduced model carries t
 \end{equation}
 
 
+#  Interpretation Conclusion
 
+We ended our model with 4 predictor variables: Revenue (`Rev`), Return on invested capital (`RoIC`), Dividends (`Div`), and Book Value Per Share (`BV`). Overall, these four variables made sense to be used as our predictor variables. These four variables are very independent according to our correlation matrix. This was beneficial for building our model. Revenue, `Rev` had the most statistically significant effect related to our response while keeping other predictors constant. This made sense because revenue is how much money a company is generating. Therefore, if a company is making more or less money then their stock price should correlate.
+
+`RoIC` had the second largest effect on our response while keeping other predictors constant. This also made sense because `RoIC` is return on invested capital and can be viewed as a way to determine a companies efficiency in relation to their deployed capital. If a company is making more or less money on the capital they are using to grow their business, then this should affect the stock price correspondingly.
+
+Dividends (`Div`) had the third largest effect on our response while keeping other predictors constant. Overall, dividends had a smaller effect on the predictor response than `Revenue` and `RoIC`. This was fairly surprising because dividends are the money that is paid back to shareholders and therefore we assumed that if a company was paying larger dividends, then the share price would increase correspondingly as well.
+
+Book Value Per Share had the least effect on our response while keeping other predictors constant. This was also fairly surprising since Book Value per Share is calculated by taking a companies assets minus their liabilities. We hypothesized that as a company grows in size, generally their assets increase or their liabilities decrease. Thus, their Book Value per Share would increase and then the share price would correspond to this. However, this was not particularly the case as evidenced by our results.
+
+We wanted to note that one of the variables that we dropped was Earnings per Share (`EPS`). We were surprised to see that `EPS` was deemed insignificant by it’s P-value and therefore dropped. This is one of the variables that investors tend to believe is more significant than what our model found.
+
+The stock market is a complex dynamical system, subject to random fluctations and high variance. It can be hard to pinpoint any conclusive quality about the market and even more difficult to predict. We  feel we can further these results by repeating this experiment with different samples and over different time periods. While the rigor of this experiment would likely not be sufficient for any type of predictive analysis, we feel that for the modest goals of this project, our results do convey some underlying information about the about the population of popular, highly-traded stocks.
