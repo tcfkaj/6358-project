@@ -40,13 +40,13 @@ The Standard & Poor's 500, often abbreviated as the S&P 500, or just the S&P, is
 
 ## Time Frame
 
-Our project is going to analyze the companies within the S&P 500 over a 7 year period. This period is going to be from 1/01/2011-12/31/2017.
+Our project is going to analyze the companies within the S&P 500 over a 7-year period. This period is going to be from 1/01/2011-12/31/2017.
 
-Approach:
+**Approach:**
 
 Due to the volatility of the stock market and how the data can sometimes be very misleading depending upon the time frame which you choose to analyze the data from, we are going to approach this project with the intention of minimizing any major outliers for our response variable (share price).
 
-For example, if we were to randomly select some date in 2011 and observe the share price for Microsoft it could be $50 per share. Likewise if we took another random date in 2011 to observe the price of Microsoft it could be $25 per share, perhaps even just a week before or after the price was at $50 per share. Furthermore, when we analyze the response variable in 2017 it could be $50 or $25, depending on the time frame you select for the observation.
+For example, if we were to randomly select some date in 2011 and observe the share price for Microsoft it could be $50 per share. Likewise, if we took another random date in 2011 to observe the price of Microsoft it could be $25 per share, perhaps even just a week before or after the price was at $50 per share. Furthermore, when we analyze the response variable in 2017 it could be $50 or $25, depending on the time frame you select for the observation.
 
 Therefore, the way that we will make sure that we do not misrepresent our response variable and by keeping the project within the scope of our class we will be taking the average of the share price for each company within the S&P 500 for the years 2011 and 2017. The 5 years in between (2012, 2013, 2014, 2015, 2016) will allow plenty of time for our response variable to change based on our predictor variables.
 
@@ -60,11 +60,11 @@ The S&P 500 is based on market cap and some companies will grow in size or fall 
 
 ## Predictor Variables
 
-We have multiple variables that we are going to use as our predictor variables. These variables have been chosen based on what what we think investors use to analyze a company before making an investment. Also, some other potential variables' data is incomplete or missing so we choose variables that were best for the scope of the project.
+We have multiple variables that we are going to use as our predictor variables. These variables have been chosen based on what we think investors use to analyze a company before making an investment. Also, some other potential variables' data is incomplete or missing so we choose variables that were best for the scope of the project.
 
 Our goal with this project is to find the predictor variables that have the biggest impact on our response variable (share price).
 
-All of our variables are going to be using their percent change in yearly unit during our time period of 2011-2017. We will start with the predictor variables' 2011 observations and end with the predictor variables' 2017 observations. We chose this time frame because it gave us our yearly data of 2011, a 5 year time frame, then our yearly data of 2017.
+All of our variables are going to be using their percent change in yearly unit during our time period of 2011-2017. We will start with the predictor variables' 2011 observations and end with the predictor variables' 2017 observations. We chose this time frame because it gave us our yearly data of 2011, a 5-year time frame, then our yearly data of 2017.
 
 1. `EPS`: Earnings per share (EPS) is the portion of a company's profit allocated to each share of common stock. Earnings per share serves as an indicator of a company's profitability.
 
@@ -76,7 +76,7 @@ All of our variables are going to be using their percent change in yearly unit d
 
 5. `RoE`: Return on equity is a measure of the profitability of a business in relation to the book value of shareholder equity, also known as net assets or assets minus liabilities. ROE is a measure of how well a company uses investments to generate earnings growth.
 
-6. `RoIC`: Return on capital (ROC), or return on invested capital(ROIC), is a ratio used in finance, valuation and accounting, as a measure of the profitability and value-creating potential of companies after taking into account the amount of initial capital invested.
+6. `RoIC`: Return on capital (ROC), or return on invested capital (ROIC), is a ratio used in finance, valuation and accounting, as a measure of the profitability and value-creating potential of companies after taking into account the amount of initial capital invested.
 
 7. `DE`: Debt/Equity (D/E) Ratio, calculated by dividing a company's total liabilities by its stockholders' equity, is a debt ratio used to measure a company's financial leverage. The D/E ratio indicates how much debt a company is using to finance its assets relative to the value of shareholders' equity.
 
@@ -244,5 +244,21 @@ where $\epsilon_i \sim^{\text{iid}} N(0, \sigma^2)$. Our reduced model carries t
 \widehat{\text{Price.ch}_{i_{}}} = 0.785 + 0.072 \text{Div}_{i_{}} + 0.025 \text{BV}_{i_{}} + 0.109 \text{RoIC}_{i_{}} + 0.479 \text{Rev}_{i_{}} + \epsilon_i.
 \end{equation}
 
+# Conclusion
 
+We ended our model with 4 predictor variables: **Revenue, Return on Invested Capital (RoIC), Dividends,** and **Book Value per Share**. Overall, these four variables made sense to be used as our predictor variables. 
+
+These four variables are very independent according to our correlation matrix. This was beneficial for building our model. 
+
+**Revenue** had the most statistically significant effect related to our response while keeping other predictors constant. This made sense because revenue is how much money a company is generating. Therefore, if a company is making more or less money than their stock price should correlate.
+
+**Return on Invested Capital (RoIC)** had the second largest effect on our response while keeping other predictors constant. This also made sense because ROIC is return on invested capital and can be viewed as a way to determine a company's efficiency in relation to their deployed capital. If a company is making more or less money on the capital they are using to grow their business, then this should affect the stock price correspondingly.
+
+**Dividends** had the third largest effect on our response while keeping other predictors constant. Overall, dividends had a smaller effect on the predictor response than Revenue and ROIC. This was fairly surprising because dividends are the money that is paid back to shareholders and therefore we assumed that if a company was paying larger dividends, then the share price would increase correspondingly as well.
+
+**Book Value per Share** had the least effect on our response while keeping other predictors constant. This was also fairly surprising since Book Value per Share is calculated by taking a company's assets minus its liabilities. We figured that as a company grows in size, generally their assets increase or their liabilities decrease. Thus, their Book Value per Share would increase and then the share price would correspond to this. However, this was not particularly the case as evidenced by our results.
+
+We wanted to note that one of the variables that we dropped was Earnings per Share (EPS). We were surprised to see that EPS was deemed insignificant by its p-value and therefore dropped. This is one of the variables that investors tend to believe is more significant than what our model found. 
+
+Overall, we thoroughly enjoyed this project. We learned a lot about our model, our data, and the stock market throughout this process. Thank you for all of your help this year teaching us the tools necessary to perform this project. 
 
