@@ -36,23 +36,23 @@ knitr::opts_chunk$set(
 
 ## S&P 500
 
-The Standard & Poor's 500, often abbreviated as the S&P 500, or just the S&P, is an American stock market index based on the market capitalizations of 500 large companies having common stock listed on the New York Stock Exchange (NYSE) or Nasdaq, Inc (NASDAQ). The NYSE and NASDAQ are the American stock exchanges where the stocks that make up the S&P 500 are traded. Market capitalization (market cap) is the market value of a publicly traded company's outstanding shares. Market capitalization is equal to the share price multiplied by the number of shares outstanding. As outstanding stock is bought and sold in public markets, capitalization could be used as an indicator of public opinion of a company's net worth and is a determining factor in some forms of stock valuation. The reason that we chose to use the S&P 500 for our companies is that it is a very broad and diversified index that includes companies from many different industries. The S&P 500 is one of the most commonly followed equity indices, and many consider it one of the best representations of the U.S. stock market, and a bellwether for the U.S. economy. The share prices for each company within the S&P 500 change daily (during trading days) based on trading interest. A share price is the price of a single share of a company, derivative or other financial asset. The share price is the highest amount someone is willing to pay for the stock, or the lowest amount that it can be bought for.
+The Standard & Poor's 500, often abbreviated as the S&P 500, or just the S&P, is an American stock market index based on the market capitalizations of 500 large companies having common stock listed on the New York Stock Exchange (NYSE) or Nasdaq, Inc (NASDAQ). The NYSE and NASDAQ are the American stock exchanges where the stocks that make up the S&P 500 are traded. Market capitalization (market cap) is the market value of a publicly traded company's outstanding shares. Market capitalization is equal to the share price multiplied by the number of shares outstanding. As outstanding stock is bought and sold in public markets, capitalization could be used as an indicator of public opinion of a company's net worth and is a determining factor in some forms of stock valuation. The reason that we chose to use the S&P 500 as a sample is that it is a very broad and diversified index that includes companies from many different industries. The S&P 500 is one of the most commonly followed equity indices, and many consider it one of the best representations of the U.S. stock market, and a bellwether for the U.S. economy. The share prices for each company within the S&P 500 change daily (during trading days) based on trading interest. A share price is the price of a single share of a company, derivative or other financial asset. The share price is the highest amount someone is willing to pay for the stock, or the lowest amount that it can be bought for.
 
 ## Time Frame
 
-Our project is going to analyze the companies within the S&P 500 over a 7 year period. This period is going to be from 1/01/2011-12/31/2017.
+Our project is going to analyze the companies within the S&P 500 over a 7-year period. This period is going to be from 1/01/2011-12/31/2017.
 
-Approach:
+#### Approach:
 
 Due to the volatility of the stock market and how the data can sometimes be very misleading depending upon the time frame which you choose to analyze the data from, we are going to approach this project with the intention of minimizing any major outliers for our response variable (share price).
 
-For example, if we were to randomly select some date in 2011 and observe the share price for Microsoft it could be $50 per share. Likewise if we took another random date in 2011 to observe the price of Microsoft it could be $25 per share, perhaps even just a week before or after the price was at $50 per share. Furthermore, when we analyze the response variable in 2017 it could be $50 or $25, depending on the time frame you select for the observation.
+For example, if we were to randomly select some date in 2011 and observe the share price for Microsoft it could be $50 per share. Likewise, if we took another random date in 2011 to observe the price of Microsoft it could be $25 per share, perhaps even just a week before or after the price was at $50 per share. Furthermore, when we analyze the response variable in 2017 it could be $50 or $25, depending on the time frame you select for the observation.
 
 Therefore, the way that we will make sure that we do not misrepresent our response variable and by keeping the project within the scope of our class we will be taking the average of the share price for each company within the S&P 500 for the years 2011 and 2017. The 5 years in between (2012, 2013, 2014, 2015, 2016) will allow plenty of time for our response variable to change based on our predictor variables.
 
 Another reason why we want to calculate the average share price for each company by year is because our predictor variables will be yearly as well.
 
-The S&P 500 is based on market cap and some companies will grow in size or fall in size so we will be using companies that were in the S&P 500 starting on January 1, 2011, and are still in the S&P 500 on December 31, 2017. As of now, we have 476 companies out of 500 that are still within the S&P 500 to analyze.
+The S&P 500 is based on market cap and some companies will grow or fall in size, so we will be using companies that were in the S&P 500 starting on January 1, 2011, and are still in the S&P 500 on December 31, 2017. As of now, we have 476 companies out of 500 that are still within the S&P 500 to analyze.
 
 ## Response Variable
 
@@ -60,11 +60,11 @@ The S&P 500 is based on market cap and some companies will grow in size or fall 
 
 ## Predictor Variables
 
-We have multiple variables that we are going to use as our predictor variables. These variables have been chosen based on what what we think investors use to analyze a company before making an investment. Also, some other potential variables' data is incomplete or missing so we choose variables that were best for the scope of the project.
+We have multiple variables that we are going to use as our predictor variables. These variables have been chosen based on what we think investors use to analyze a company before making an investment. Also, some other potential variables' data is incomplete or missing so we choose variables that were best for the scope of the project.
 
 Our goal with this project is to find the predictor variables that have the biggest impact on our response variable (share price).
 
-All of our variables are going to be using their percent change in yearly unit during our time period of 2011-2017. We will start with the predictor variables' 2011 observations and end with the predictor variables' 2017 observations. We chose this time frame because it gave us our yearly data of 2011, a 5 year time frame, then our yearly data of 2017.
+All our variables are going to be using their percent change in yearly unit during our time period of 2011-2017. We will start with the predictor variables' 2011 observations and end with the predictor variables' 2017 observations. We chose this time frame because it gave us our yearly data of 2011, a 5-year time frame, then our yearly data of 2017.
 
 1. `EPS`: Earnings per share (EPS) is the portion of a company's profit allocated to each share of common stock. Earnings per share serves as an indicator of a company's profitability.
 
@@ -76,7 +76,7 @@ All of our variables are going to be using their percent change in yearly unit d
 
 5. `RoE`: Return on equity is a measure of the profitability of a business in relation to the book value of shareholder equity, also known as net assets or assets minus liabilities. ROE is a measure of how well a company uses investments to generate earnings growth.
 
-6. `RoIC`: Return on capital (ROC), or return on invested capital(ROIC), is a ratio used in finance, valuation and accounting, as a measure of the profitability and value-creating potential of companies after taking into account the amount of initial capital invested.
+6. `RoIC`: Return on capital (ROC), or return on invested capital (ROIC), is a ratio used in finance, valuation and accounting, as a measure of the profitability and value-creating potential of companies after taking into account the amount of initial capital invested.
 
 7. `DE`: Debt/Equity (D/E) Ratio, calculated by dividing a company's total liabilities by its stockholders' equity, is a debt ratio used to measure a company's financial leverage. The D/E ratio indicates how much debt a company is using to finance its assets relative to the value of shareholders' equity.
 
@@ -94,7 +94,7 @@ colnames(full_data) <- c("Co.", "Price.ch", "EPS", "Div", "BV", "RoA", "RoE", "R
 x <- head(full_data)
 knitr::kable(x[,1:10], format="markdown", digits=4)
 ```
-from this we can obtain the following correlation matrix.
+from this we obtain the following correlation matrix.
 
 ```{r echo=FALSE}
 cor.matrix <- cor(full_data[,-1], use="complete.obs")
@@ -111,11 +111,11 @@ plot(full_data[,-1], pch=20)
 
 We chose this project due to the vast amounts of data that the stock market encompasses. The stock market is a very broad topic and this project can be applied to many different situations.
 
-With our project we hope to find which predictor variables affect the response variable (share price) the most. We are excited to see what our models come up with. The findings will be interesting as there are many different theories as to what is the most important predictor variables for a companies share price.
+With our project we hope to find which predictor variables affect the response variable (share price) the most. There are many different theories as to what are the most important predictor variables for each company's change in share price. It will be interesting to see what our model tells us in this regard.
 
 # Data preprocessing
 
-Before formulating our model, we cleaned our data by filling in missing values. For the predictor variable `Div`, missing values were assumed to be $0$, this is because dividends other than $0$ are usually reported and recorded. For all other predictors, missing values were filled in with the mean among all observations for that data. After our data was cleaned we have the following correlation matrix and plot.
+Before formulating our model, we cleaned our data by filling in missing values. For the predictor variable `Div`, missing values were assumed to be $0$, this is because dividends other than $0$ are usually reported and recorded. For all other predictors, missing values were filled in with the mean among all observations for that data. After cleaning our data, we obtained the following correlation matrix and plot.
 
 ```{r echo=FALSE}
 clean_data <- read.table("clean_data.csv", header=T, sep=",")
@@ -152,7 +152,7 @@ We will formulate a simple linear model, where our response, `Price.ch`, is a li
 
 where $\epsilon_i \sim^{\text{iid}} N(0, \sigma^2)$. Where $\sigma^2$ is the population variance. Therefore we make the following assumptions for our model
 
-1. Observations are indepent indentically distributed (iid), as is error, $\epsilon_i$.
+1. Observations are independent identically distributed (iid), as is error, $\epsilon_i$.
 2. Our response is normally distributed with mean $0$ and variance $\sigma^2$
 
 
@@ -196,7 +196,7 @@ It is generally not a good idea to drop a significant number of outliers without
 
 2. The stock market is very volatile and is littered with extreme cases. Our predictors are very basic and most extreme cases will likely be correlated with other factors outside the scope of this project.
 
-3. We are studying the SP500 as a subset of popular stocks, but it also gives us insight into the population of all stocks. The SP500 is likely not representative of the population of all stocks. A random subset of 500 stocks from all stocks is more likely to contain a smaller percentage of these extreme observations. In the worst case dropping a small subset of outliers may actually help correct for this, making our sample more representative of the population of all stocks.
+3. We are studying the SP500 as a subset of popular stocks, but it also gives us insight into the population of all stocks. The SP500 is likely not representative of the population of all stocks. A random subset of 500 stocks from all stocks is more likely to contain a smaller percentage of these extreme observations. In the worst case dropping a small subset of outliers may help correct for this, making our sample more representative of the population of all stocks.
 
 Our objective is exploratory in nature and we are not expecting to attain any predictive power from this model. We are only interested in which predictors are significant for most cases. We feel that this model, even with the outliers dropped, is still realistic in this regard.
 
@@ -211,7 +211,7 @@ colnames(final_data) <- c("Price.ch", "EPS", "Div", "BV", "RoA", "RoE", "RoIC", 
 final.lm <- lm(Price.ch~., data=final_data)
 summary(final.lm)
 ```
-We now have an R-squared of $0.5061$, indicating that approximately $51\%$ of the variation in our response can be explained by our predictors. Additionally the p-value of our model remained the same, indicating significance of our overall model. However, we now show four initially significant predictors, `Div`, `BV`, `RoIC`, and `Rev`. After generating the same diagnostic plots as before we see improve, albeit not perfection, which is hardly ever to be expected from real world data.
+We now have an R-squared of $0.5061$, indicating that approximately $51\%$ of the variation in our response can be explained by our predictors. Additionally, the p-value of our model remained the same, indicating significance of our overall model. However, we now show four initially significant predictors, `Div`, `BV`, `RoIC`, and `Rev`. After generating the same diagnostic plots as before we see improve, albeit not perfection, which is hardly ever to be expected from real world data.
 
 
 ```{r, echo=FALSE, fig.cap="\\label{fig:figs}Both the plot of errors vs fitted values (Left) and QQ Plot (Right) show improvement."}
@@ -219,9 +219,9 @@ par(mfrow=c(1,2))
 plot(final.lm, c(1,2))
 ```
 
-However, with these improvements we felt comfortable moving forward with our model and all of its assumptions.
+However, with these improvements we felt comfortable moving forward with our model and all subsequent assumptions.
 
-Since not all predictors exihibited significance, we proceeded to reduce our model using R's built in `step` function. This function minimizes an information criteron AIC, which in effect improves model fit and reduces complexity. The output summary of this process and the resulting reduced model is as follows.
+Since not all predictors exhibited significance, we proceeded to reduce our model using R's built in `step` function. This function minimizes an information criterion AIC, which in effect improves model fit and reduces complexity. The output summary of this process and the resulting reduced model is as follows.
 
 ```{r, echo=FALSE}
 final.lm.red <- step(final.lm)
@@ -247,14 +247,16 @@ where $\epsilon_i \sim^{\text{iid}} N(0, \sigma^2)$. Our reduced model carries t
 
 #  Interpretation Conclusion
 
-We ended our model with 4 predictor variables: Revenue (`Rev`), Return on invested capital (`RoIC`), Dividends (`Div`), and Book Value Per Share (`BV`). Overall, these four variables made sense to be used as our predictor variables. These four variables are very independent according to our correlation matrix. This was beneficial for building our model. Revenue, `Rev` had the most statistically significant effect related to our response while keeping other predictors constant. This made sense because revenue is how much money a company is generating. Therefore, if a company is making more or less money then their stock price should correlate.
+We ended our model with 4 predictor variables: **Revenue**, **Return on Invested Capital**, **Dividends** and **Book Value per Share**. Overall, these four variables made sense to be used as our predictor variables. These four variables are very independent according to our correlation matrix. This was beneficial for building our model.
 
-`RoIC` had the second largest effect on our response while keeping other predictors constant. This also made sense because `RoIC` is return on invested capital and can be viewed as a way to determine a companies efficiency in relation to their deployed capital. If a company is making more or less money on the capital they are using to grow their business, then this should affect the stock price correspondingly.
+**Revenue** had the most statistically significant effect related to our response while keeping other predictors constant. This made sense because revenue is how much money a company is generating. Therefore, if a company is making  money than their stock price should correlate.
 
-Dividends (`Div`) had the third largest effect on our response while keeping other predictors constant. Overall, dividends had a smaller effect on the predictor response than `Revenue` and `RoIC`. This was fairly surprising because dividends are the money that is paid back to shareholders and therefore we assumed that if a company was paying larger dividends, then the share price would increase correspondingly as well.
+**Return on Invested Capital** had the second largest effect on our response while keeping other predictors constant. This also made sense because `RoIC` is return on invested capital and can be viewed as a way to determine a company's efficiency in relation to their deployed capital. If a company is making money on the capital they are using to grow their business, then this should affect the stock price correspondingly.
 
-Book Value Per Share had the least effect on our response while keeping other predictors constant. This was also fairly surprising since Book Value per Share is calculated by taking a companies assets minus their liabilities. We hypothesized that as a company grows in size, generally their assets increase or their liabilities decrease. Thus, their Book Value per Share would increase and then the share price would correspond to this. However, this was not particularly the case as evidenced by our results.
+**Dividends** had the third largest effect on our response while keeping other predictors constant. Overall, dividends had a smaller effect on the predictor response than `Revenue` and `RoIC`. This was surprising because dividends are the money that is paid back to shareholders and therefore, we assumed that if a company was paying larger dividends, then the share price would increase correspondingly as well.
 
-We wanted to note that one of the variables that we dropped was Earnings per Share (`EPS`). We were surprised to see that `EPS` was deemed insignificant by it’s P-value and therefore dropped. This is one of the variables that investors tend to believe is more significant than what our model found.
+**Book Value per Share** had the least effect on our response while keeping other predictors constant. This was also surprising since Book Value per Share is calculated by calculating the difference between a company's assets and liabilities. We hypothesized that as a company grows either their assets increase or their liabilities decrease. Thus, their Book Value per Share would increase and then the share price would correspond to this. However, this was not particularly the case as evidenced by our results.
 
-The stock market is a complex dynamical system, subject to random fluctations and high variance. It can be hard to pinpoint any conclusive quality about the market and even more difficult to predict. We  feel we can further these results by repeating this experiment with different samples and over different time periods. While the rigor of this experiment would likely not be sufficient for any type of predictive analysis, we feel that for the modest goals of this project, our results do convey some underlying information about the about the population of popular, highly-traded stocks.
+We wanted to note that one of the variables that we dropped was `EPS`. We were surprised to see that `EPS` was deemed insignificant by its p-value and therefore dropped. This is one of the variables that investors tend to believe is more significant than what our model found.
+
+The stock market is a complex dynamical system, subject to random fluctuations and high variance. It can be hard to pinpoint any conclusive quality about the market and even more difficult to predict. We  feel we can further these results by repeating this experiment with different samples and over different time periods. While the rigor of this experiment is likely insufficient for any type of predictive analysis, we feel that for the modest goals of this project, our results do convey some underlying information about the about the population of popular, highly-traded stocks.
